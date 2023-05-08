@@ -28,7 +28,7 @@ To perform GPU based vector summation and explore the differences with different
 
 * Repeat the steps with different input arrays and execution configurations to further explore the program's performance characteristics.
 
-## i) Using the program sumArraysOnGPU-timer.cu, set the block.x = 1023. Recompile and run it. Compare the result with the execution configuration of block.x = 1024. Try to explain the difference and the reason.
+## (i) Using the program sumArraysOnGPU-timer.cu, set the block.x = 1023. Recompile and run it. Compare the result with the execution configuration of block.x = 1024. Try to explain the difference and the reason.
 ## PROGRAM
     #include <cuda_runtime.h>
     #include <stdio.h>
@@ -109,7 +109,7 @@ To perform GPU based vector summation and explore the differences with different
 * On the other hand, when we set block.x = 1024, each block has 1024 threads, which is a multiple of 32, so all warps have 32 threads. This results in better utilization of the GPU resources and slightly better performance.
 * However, the difference in performance is very small and may not be noticeable in practice. Therefore, choosing the configuration with block.x = 1024 over block.x = 1023 is not always necessary and may depend on the specific hardware and workload.
 
-## ii) Refer to sumArraysOnGPU-timer.cu, and let block.x = 256. Make a new kernel to let each thread handle two elements. Compare the results with other execution configurations.
+## (ii) Refer to sumArraysOnGPU-timer.cu, and let block.x = 256. Make a new kernel to let each thread handle two elements. Compare the results with other execution configurations.
 ## PROGRAM
         #include <cuda_runtime.h>
         #include <stdio.h>
