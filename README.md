@@ -245,29 +245,43 @@ sumArraysOnGPU-timer.cu
         }
 
 ## Output:
+
+
 Let the block.x = 1023:
 
-    Using Device 0: NVIDIA GeForce GT 710
-	Vector Size 16777216
-	InitialData Time elapsed 0.423369 sec
-	sumArraysOnHost Time elapsed 0.034731 sec
-	sumArraysOnGPU <<< 16401, 1023 >>> Time elapsed 0.025321 sec
-	Arrays match.
-	Let the block.x = 1024:
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer.cu -o sumArraysOnGPU-timer
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer.cu
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# ./sumArraysOnGPU-timer
+		./sumArraysOnGPU-timer Starting...
+		Using Device 0: NVIDIA GeForce GT 710
+		Vector size 16777216
+		initialData Time elapsed 0.427707 sec
+		sumArraysOnHost Time elapsed 0.034538 sec
+		sumArraysOnGPU <<<  16401, 1023  >>>  Time elapsed 0.020212 sec
+		Arrays match.
+
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# 
+
 Let the block.x = 1024:
 
-    Using Device 0: NVIDIA GeForce GT 710
-	Vector size 16777216 
-    InitialData Time elapsed 0.423369 sec
-	sumArraysOnHost Time elapsed 0.034731 sec
-    sumArraysOnGPU <<< 16401, 1023 >>> Time elapsed 0.002456 sec
-	Arrays match.
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer.cu -o sumArraysOnGPU-timer
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer.cu
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# ./sumArraysOnGPU-timer
+		./sumArraysOnGPU-timer Starting...
+		Using Device 0: NVIDIA GeForce GT 710
+		Vector size 16777216
+		initialData Time elapsed 0.423519 sec
+		sumArraysOnHost Time elapsed 0.034505 sec
+		sumArraysOnGPU <<<  16384, 1024  >>>  Time elapsed 0.020785 sec
+		Arrays match.
 
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# 
 
 ## Differences and the Reason:
-* The maximum number of threads per block is determined by the hardware and varies among different GPU models. In this case, it seems that the maximum number of threads per block for the device being used is 1024.
-* When launching a kernel with a large number of threads, it is usually beneficial to use as many threads per block as possible, up to the maximum allowed by the device. This is because launching multiple blocks incurs some overhead, and using a larger number of threads per block can help to hide this overhead and improve performance.
-* In this case, we can see that using 1024 threads per block instead of 1023 resulted in a significant performance improvement, with the kernel executing in only 0.002456 sec compared to 0.025321 sec. This is likely due to the reduced overhead of launching fewer blocks.
+* The difference between the execution configurations with block.x = 1023 and block.x = 1024 is the number of threads per block. When block.x = 1023, there are a total of 16,694 threads (16401 blocks x 1023 threads per block), while with block.x = 1024, there are 16,777,216 threads (16384 blocks x 1024 threads per block). This means that with block.x = 1024, the total number of threads is much higher than with block.x = 1023.
+* In terms of performance, the difference between these two configurations is not significant. The execution time of the kernel function sumArraysOnGPU is slightly faster with block.x = 1023 (0.020212 sec) compared to block.x = 1024 (0.020785 sec), but the difference is small.
+* The reason why the performance difference is small is because the number of threads that can be run in parallel is limited by the hardware resources of the GPU. In this case, the number of threads per block is already high enough that adding more threads does not result in a significant improvement in performance. Additionally, with block.x = 1024, there are fewer blocks, which can lead to underutilization of the GPU's resources.
+* Overall, the performance difference between these two configurations is not significant, and the optimal configuration may depend on the specific hardware and workload.
 
 
 ## (ii) Refer to sumArraysOnGPU-timer.cu, and let block.x = 256. Make a new kernel to let each thread handle two elements. Compare the results with other execution configurations.
@@ -395,24 +409,41 @@ Let the block.x = 1024:
         }
 
 ## Output:
-        Vector size 16777216
-        sumArraysOnGPU <<<  65536, 256  >>>  Time elapsed 0.000361 sec
-        Arrays match.
-        sumArraysOnGPU <<<  32768, 512  >>>  Time elapsed 0.000384 sec
-        Arrays match.
-        sumArraysOnGPU <<<  16384, 1024  >>>  Time elapsed 0.000401 sec
-        Arrays match.
-        sumArraysOnGPU_2 <<<  32768, 128 >>> Time elapsed 0.000201 sec
-        Arrays match.
-        sumArraysOnGPU_2 <<<  16384, 256 >>> Time elapsed 0.000193 sec
-        Arrays match.
-        sumArraysOnGPU_2 <<<  8192, 512 >>> Time elapsed 0.000189 sec
-        Arrays match.
+Let the block.x = 128:
+
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer-2.cu -o sumArraysOnGPU-timer-2
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer-2.cu
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# ./sumArraysOnGPU-timer-2
+		./sumArraysOnGPU-timer-2 Starting...
+		Using Device 0: NVIDIA GeForce GT 710
+		Vector size 16777216
+		initialData Time elapsed 0.425350 sec
+		sumArraysOnHost Time elapsed 0.034510 sec
+		sumArraysOnGPU_2 <<< 65536, 128 >>> Time elapsed 0.020250 sec
+		Arrays match.
+
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# 
+
+Let the block.x = 256:
+
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer-2.cu -o sumArraysOnGPU-timer-2
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# nvcc sumArraysOnGPU-timer-2.cu
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# ./sumArraysOnGPU-timer-2
+		./sumArraysOnGPU-timer-2 Starting...
+		Using Device 0: NVIDIA GeForce GT 710
+		Vector size 16777216
+		initialData Time elapsed 0.425328 sec
+		sumArraysOnHost Time elapsed 0.034418 sec
+		sumArraysOnGPU_2 <<< 32768, 256 >>> Time elapsed 0.019457 sec
+		Arrays match.
+
+		root@SAV-MLSystem:/home/student/Sidd_Lab_Exp_1# 
 
 ## Differences and the Reason:
-* As we can see, the performance of the modified kernel with two elements per thread is better than the original kernel for all block sizes tested. 
-* The speedup is most significant for smaller block sizes, where the overhead of launching threads becomes more noticeable. 
-* For larger block sizes, the difference in performance between the two kernels is relatively small.
+* By changing the block size from 128 to 256, the number of blocks needed to process the same amount of data was halved, from 65536 to 32768. However, since each thread now handles two elements instead of one, the total number of threads needed remains the same, which is equal to the product of the number of blocks and the block size.
+* The execution time for the kernel sumArraysOnGPU-timer decreased slightly from 0.020250 sec to 0.019457 sec when the block size was changed from 128 to 256. This suggests that the optimal block size may lie between these two values.
+* It is important to note that the execution time for sumArraysOnHost remains constant, as it is not affected by the block size. The overall performance of the program is determined by the execution time of the kernel sumArraysOnGPU-timer, which can be optimized by experimenting with different block sizes.
+
 
 ## Result:
 Thus, to perform GPU based vector summation and explore the differences with different block values has been successfully performed.
