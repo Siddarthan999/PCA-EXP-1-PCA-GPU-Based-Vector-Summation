@@ -453,4 +453,4 @@ int main(int argc, char **argv)
 ![image](https://github.com/Siddarthan999/PCA-EXP-1-PCA-GPU-Based-Vector-Summation/assets/91734840/73a6573f-6c5c-4796-b30c-43f45f5048c0)
 
 ## Result:
-Thus, to perform GPU based vector summation and explore the differences with different block values has been successfully performed.
+The block size 1023 performs better in the GPU with an elapsed time of 0.0197 seconds, and the block size 1024 shows better results in the host with an elapsed time of 0.022 seconds. Using a block size of 256 and two threads simultaneously has provided the best results in the GPU with an elapsed time of 0.021 seconds. Thus, the differences between the execution configurations of GPU based vector summation has been explored successfully.
